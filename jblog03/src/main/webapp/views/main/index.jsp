@@ -3,6 +3,7 @@
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <!doctype html>
 <html>
@@ -16,7 +17,7 @@
     <h1 class="logo">JBlog</h1>
     <ul class="menu">
         <li><a href="">로그인</a></li>
-        <li><a href="">회원가입</a></li>
+        <li><a href="${contextPath}/user/join">회원가입</a></li>
         <li><a href="">로그아웃</a></li>
         <li><a href="">내블로그</a></li>
     </ul>

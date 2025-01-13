@@ -2,7 +2,13 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <typeAliases>
+        <typeAlias type="jblog.vo.BlogVo" alias="blog"/>
+        <typeAlias type="jblog.vo.UserVo" alias="user"/>
+        <typeAlias type="jblog.vo.CategoryVo" alias="category"/>
     </typeAliases>
     <mappers>
+        <mapper resource="mybatis/mapper/blog.xml"/>
+        <mapper resource="mybatis/mapper/user.xml"/>
+        <mapper resource="mybatis/mapper/category.xml"/>
     </mappers>
 </configuration>
