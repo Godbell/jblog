@@ -6,11 +6,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import jblog.config.auth.Auth;
+import jblog.config.constant.JBlogAttribute;
 import jblog.dto.SignInDto;
 import jblog.dto.UserJoinRequestDto;
 import jblog.service.UserService;
@@ -63,7 +65,7 @@ public class UserController {
         @Valid @ModelAttribute SignInDto signInDto,
         BindingResult result,
         Model model,
-        HttpServletRequest req
+        HttpSession session
     ) {
         if (result.hasErrors()) {
             model.addAttribute("errors", result.getAllErrors());
@@ -77,9 +79,19 @@ public class UserController {
             return "user/login";
         }
 
-        HttpSession session = req.getSession();
-        session.setAttribute("user", user);
+        session.setAttribute(JBlogAttribute.SIGNED_USER.name(), user);
 
         return "redirect:/";
+    }
+
+    @Auth
+    @GetMapping("/signout")
+    public String signOut(
+        HttpSession session, @RequestHeader("referer") String referer
+    ) {
+        session.removeAttribute(JBlogAttribute.SIGNED_USER.name());
+        session.invalidate();
+
+        return "redirect:" + referer;
     }
 }

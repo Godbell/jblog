@@ -15,6 +15,21 @@
     <mvc:annotation-driven/>
     <mvc:default-servlet-handler/>
 
+    <mvc:annotation-driven>
+        <mvc:argument-resolvers>
+            <bean class="jblog.config.auth.AuthUserHandlerMethodArgumentResolver"/>
+        </mvc:argument-resolvers>
+    </mvc:annotation-driven>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/user/join"/>
+            <mvc:exclude-mapping path="/user/login"/>
+            <bean class="jblog.config.auth.AuthInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
         <property name="prefix" value="/views/"/>
