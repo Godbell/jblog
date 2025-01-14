@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jblog.config.constant.HeaderName;
 import jblog.config.constant.JBlogAttribute;
 import jblog.config.constant.JBlogView;
+import jblog.exception.NotFoundException;
 import jblog.service.BlogService;
 import jblog.vo.BlogVo;
 
@@ -39,6 +40,11 @@ public class BlogController {
         }
 
         BlogVo blogVo = blogService.getBlog(blogId);
+
+        if (blogVo == null) {
+            throw new NotFoundException();
+        }
+
         model.addAttribute(JBlogAttribute.BLOG.name(), blogVo);
 
         return JBlogView.BLOG;
