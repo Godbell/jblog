@@ -6,6 +6,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jblog.config.constant.JBlogAttribute;
+import jblog.config.constant.JBlogRequestMapping;
 import jblog.vo.UserVo;
 public class AuthInterceptor implements HandlerInterceptor {
     @Override
@@ -34,7 +35,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         UserVo userVo = (UserVo)req.getSession().getAttribute(JBlogAttribute.SIGNED_USER.name());
 
         if (userVo == null) {
-            res.sendRedirect(req.getContextPath() + "/user/signin");
+            res.sendRedirect(req.getContextPath() + JBlogRequestMapping.USER_SIGNIN);
             return false;
         }
 

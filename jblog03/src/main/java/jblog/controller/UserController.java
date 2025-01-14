@@ -12,14 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jblog.config.auth.Auth;
+import jblog.config.constant.HeaderName;
 import jblog.config.constant.JBlogAttribute;
+import jblog.config.constant.JBlogRequestMapping;
+import jblog.config.constant.JBlogView;
 import jblog.dto.SignInDto;
 import jblog.dto.UserJoinRequestDto;
 import jblog.service.UserService;
 import jblog.vo.UserVo;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping(JBlogRequestMapping.USER)
 public class UserController {
     private final UserService userService;
 
@@ -27,14 +30,14 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/join")
+    @GetMapping(JBlogRequestMapping.USER_JOIN)
     public String viewJoin(
         @ModelAttribute UserJoinRequestDto userJoinRequestDto
     ) {
-        return "user/join";
+        return JBlogView.USER_JOIN;
     }
 
-    @PostMapping("/join")
+    @PostMapping(JBlogRequestMapping.USER_JOIN)
     public String join(
         @Valid @ModelAttribute UserJoinRequestDto userJoinRequestDto,
         BindingResult result,
@@ -42,25 +45,29 @@ public class UserController {
     ) {
         if (result.hasErrors()) {
             model.addAllAttributes(result.getModel());
-            return "user/join";
+            return JBlogView.USER_JOIN;
         }
 
         userService.createUser(userJoinRequestDto);
 
-        return "redirect:/user/joinsuccess";
+        return String.format(
+            "redirect:%s%s"
+            , JBlogRequestMapping.USER
+            , JBlogRequestMapping.USER_JOINSUCCESS
+        );
     }
 
-    @GetMapping("/joinsuccess")
+    @GetMapping(JBlogRequestMapping.USER_JOINSUCCESS)
     public String viewJoinSuccess() {
-        return "user/joinsuccess";
+        return JBlogView.USER_JOINSUCCESS;
     }
 
-    @GetMapping("/signin")
+    @GetMapping(JBlogRequestMapping.USER_SIGNIN)
     public String signIn(@ModelAttribute SignInDto signInDto) {
-        return "user/login";
+        return JBlogView.USER_SIGNIN;
     }
 
-    @PostMapping("/signin")
+    @PostMapping(JBlogRequestMapping.USER_SIGNIN)
     public String signIn(
         @Valid @ModelAttribute SignInDto signInDto,
         BindingResult result,
@@ -68,26 +75,31 @@ public class UserController {
         HttpSession session
     ) {
         if (result.hasErrors()) {
-            model.addAttribute("errors", result.getAllErrors());
-            return "user/login";
+            model.addAttribute(
+                JBlogAttribute.ERRORS.name(),
+                result.getAllErrors()
+            );
+            return JBlogView.USER_SIGNIN;
         }
 
         UserVo user = userService.getUser(signInDto.getId(), signInDto.getPassword());
 
         if (user == null) {
-            model.addAttribute("errors", "login failed");
-            return "user/login";
+            model.addAttribute(
+                JBlogAttribute.ERRORS.name(),
+                "login failed"
+            );
+            return JBlogView.USER_SIGNIN;
         }
 
         session.setAttribute(JBlogAttribute.SIGNED_USER.name(), user);
-
-        return "redirect:/";
+        return "redirect:" + JBlogRequestMapping.MAIN;
     }
 
     @Auth
-    @GetMapping("/signout")
+    @GetMapping(JBlogRequestMapping.USER_SIGNOUT)
     public String signOut(
-        HttpSession session, @RequestHeader("referer") String referer
+        HttpSession session, @RequestHeader(HeaderName.REFERER) String referer
     ) {
         session.removeAttribute(JBlogAttribute.SIGNED_USER.name());
         session.invalidate();
