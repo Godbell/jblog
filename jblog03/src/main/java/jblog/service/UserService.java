@@ -32,4 +32,8 @@ public class UserService {
 
         blogService.createBlog(dto.getId());
     }
+
+    public UserVo getUser(String id, String password) {
+        return this.userRepository.findByIdAndPassword(id, password);
+    }
 }
