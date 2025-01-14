@@ -46,7 +46,6 @@ public class BlogController {
         }
 
         model.addAttribute(JBlogAttribute.BLOG.name(), blogVo);
-
         return JBlogView.BLOG;
     }
 }
