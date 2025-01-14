@@ -11,4 +11,10 @@
         FROM user
         WHERE id = #{id};
     </select>
+    <select id="findByIdAndPassword" parameterType="map" resultType="user">
+        SELECT id, name
+        FROM user
+        WHERE id = #{id}
+          AND password = #{password};
+    </select>
 </mapper>
