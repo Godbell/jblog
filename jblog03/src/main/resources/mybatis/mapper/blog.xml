@@ -7,14 +7,10 @@
         VALUES (#{title}, #{profile}, #{blogId})
     </insert>
     <select id="blog.findById" parameterType="string" resultType="blog">
-        SELECT content,
-               category_id   AS "categoryId",
-               category.name AS "categoryName",
-               reg_date      AS "regDate",
-               title
-        FROM post
-                 LEFT JOIN jblog.category category
-                           ON post.category_id = category.id
-        WHERE post.id = #{id};
+        SELECT blog_id,
+               title,
+               profile
+        FROM blog
+        WHERE blog_id = #{blogId};
     </select>
 </mapper>
