@@ -66,13 +66,14 @@ public class UserController {
         HttpServletRequest req
     ) {
         if (result.hasErrors()) {
-            model.addAllAttributes(result.getModel());
+            model.addAttribute("errors", result.getAllErrors());
             return "user/login";
         }
 
         UserVo user = userService.getUser(signInDto.getId(), signInDto.getPassword());
 
         if (user == null) {
+            model.addAttribute("errors", "login failed");
             return "user/login";
         }
 
