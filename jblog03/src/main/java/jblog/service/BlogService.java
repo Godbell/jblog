@@ -45,4 +45,8 @@ public class BlogService {
     private void createDefaultCategory(String blogId) {
         createCategory("미분류", blogId);
     }
+
+    public BlogVo getBlog(String id) {
+        return blogRepository.findById(id);
+    }
 }
