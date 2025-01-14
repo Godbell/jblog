@@ -7,14 +7,10 @@
 
 <!doctype html>
 <html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>JBlog</title>
-    <Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
-</head>
+<c:import url="/views/includes/jblog-head.jsp"/>
 <body>
 <div class="center-content">
-    <h1 class="logo">JBlog</h1>
+    <c:import url="/views/includes/jblog-logo.jsp"/>
     <c:import url="/views/includes/menu.jsp"/>
     <form class="search-form">
         <fieldset>

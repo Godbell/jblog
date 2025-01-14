@@ -8,12 +8,7 @@
 
 <!doctype html>
 <html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>JBlog</title>
-    <Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery/jquery-1.9.0.js"></script>
-</head>
+<c:import url="/views/includes/jblog-head.jsp"/>
 <body>
 <%--@elvariable id="errors" type="java.lang.Object"--%>
 <c:if test="${not empty errors}">
@@ -22,7 +17,7 @@
     </script>
 </c:if>
 <div class="center-content">
-    <h1 class="logo">JBlog</h1>
+    <c:import url="/views/includes/jblog-logo.jsp"/>
     <c:import url="/views/includes/menu.jsp"/>
     <%--@elvariable id="signInDto" type="jblog.dto.SignInDto"--%>
     <form:form class="login-form" modelAttribute="signInDto" method="post"
