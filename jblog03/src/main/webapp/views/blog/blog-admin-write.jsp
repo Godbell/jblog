@@ -2,32 +2,18 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <!doctype html>
 <html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>JBlog</title>
-    <Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
-</head>
+<c:import url="/views/blog/blog-head.jsp"/>
 <body>
 <div id="container">
-    <div id="header">
-        <h1>Spring 이야기</h1>
-        <ul>
-            <li><a href="">로그인</a></li>
-            <li><a href="">로그아웃</a></li>
-            <li><a href="">블로그 관리</a></li>
-        </ul>
-    </div>
+    <c:import url="/views/blog/blog-header.jsp"/>
     <div id="wrapper">
         <div id="content" class="full-screen">
-            <ul class="admin-menu">
-                <li><a href="">기본설정</a></li>
-                <li><a href="">카테고리</a></li>
-                <li class="selected">글작성</li>
-            </ul>
+            <c:import url="/views/blog/blog-admin-menu.jsp"/>
             <form action="" method="post">
                 <table class="admin-cat-write">
                     <tr>

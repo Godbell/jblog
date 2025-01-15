@@ -27,7 +27,55 @@ public class BlogController {
         this.postService = postService;
     }
 
-    @GetMapping({"", "/", "/{categoryId}", "/{categoryId}/{postId}"})
+    @GetMapping({"admin", "admin/", "/admin/basic"})
+    public String viewAdminBasic(
+        @PathVariable("blogId") String blogId,
+        Model model
+    ) {
+        BlogVo blog = blogService.getBlog(blogId);
+
+        if (blog == null) {
+            throw new NotFoundException();
+        }
+
+        model.addAttribute(JBlogAttribute.BLOG.name(), blog);
+
+        return JBlogView.BLOG_ADMIN_BASIC;
+    }
+
+    @GetMapping("/admin/category")
+    public String viewAdminCategory(
+        @PathVariable("blogId") String blogId,
+        Model model
+    ) {
+        BlogVo blog = blogService.getBlog(blogId);
+
+        if (blog == null) {
+            throw new NotFoundException();
+        }
+
+        model.addAttribute(JBlogAttribute.BLOG.name(), blog);
+
+        return JBlogView.BLOG_ADMIN_CATEGORY;
+    }
+
+    @GetMapping("/admin/write")
+    public String viewAdminWrite(
+        @PathVariable("blogId") String blogId,
+        Model model
+    ) {
+        BlogVo blog = blogService.getBlog(blogId);
+
+        if (blog == null) {
+            throw new NotFoundException();
+        }
+
+        model.addAttribute(JBlogAttribute.BLOG.name(), blog);
+
+        return JBlogView.BLOG_ADMIN_WRITE;
+    }
+
+    @GetMapping({"", "/", "/{categoryId:^[0-9]*$}", "/{categoryId:^[0-9]*$}/{postId:^[0-9]*$}"})
     public String viewBlog(
         @PathVariable("blogId") String blogId,
         @PathVariable(value = "categoryId", required = false) Long categoryId,
