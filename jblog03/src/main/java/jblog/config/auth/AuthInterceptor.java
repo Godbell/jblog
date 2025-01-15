@@ -35,7 +35,10 @@ public class AuthInterceptor implements HandlerInterceptor {
         UserVo userVo = (UserVo)req.getSession().getAttribute(JBlogAttribute.SIGNED_USER.name());
 
         if (userVo == null) {
-            res.sendRedirect(req.getContextPath() + JBlogRequestMapping.USER_SIGNIN);
+            res.sendRedirect(req.getContextPath()
+                + JBlogRequestMapping.USER
+                + JBlogRequestMapping.USER_SIGNIN
+            );
             return false;
         }
 
