@@ -4,6 +4,7 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+<c:set var="userAttributeName" value="<%=jblog.config.constant.JBlogAttribute.SIGNED_USER.name()%>"/>
 <% pageContext.setAttribute("newline", "\n"); %>
 <%--@elvariable id="BLOG" type="jblog.vo.BlogVo"--%>
 <%--@elvariable id="POST" type="jblog.dto.PostResponseDto"--%>
@@ -20,9 +21,17 @@
     <div id="header">
         <h1>Spring 이야기</h1>
         <ul>
-            <li><a href="${contextPath}/user/signin">로그인</a></li>
-            <li><a href="${contextPath}/user/signout">로그아웃</a></li>
-            <li><a href="${contextPath}/${BLOG.blogId}/admin">블로그 관리</a></li>
+            <c:choose>
+                <c:when test="${empty sessionScope[userAttributeName]}">
+                    <li><a href="${contextPath}/user/signin">로그인</a></li>
+                </c:when>
+                <c:otherwise>
+                    <li><a href="${contextPath}/user/signout">로그아웃</a></li>
+                    <c:if test="${BLOG.blogId.equals(sessionScope[userAttributeName].id)}">
+                        <li><a href="${contextPath}/${BLOG.blogId}/admin">블로그 관리</a></li>
+                    </c:if>
+                </c:otherwise>
+            </c:choose>
         </ul>
     </div>
     <div id="wrapper">
