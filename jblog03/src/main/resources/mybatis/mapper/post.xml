@@ -17,19 +17,19 @@
         p.content AS "content"
         FROM post p
         LEFT JOIN jblog.category c on p.category_id = c.id
+        WHERE c.blog_id = #{blogId}
+        <if test="categoryId != null">
+            AND category_id = #{categoryId}
+        </if>
         <choose>
             <when test="postId == null">
-                WHERE c.blog_id = #{blogId}
                 ORDER BY reg_date DESC
                 LIMIT 0, 1
             </when>
             <otherwise>
-                WHERE p.id = #{postId}
+                AND p.id = #{postId}
             </otherwise>
         </choose>
-        <if test="categoryId != null">
-            AND category_id = #{categoryId}
-        </if>
         ;
     </select>
     <select id="findByBlogIdAndCategoryId"
