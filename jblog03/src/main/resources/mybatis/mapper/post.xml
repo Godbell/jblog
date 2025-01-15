@@ -32,4 +32,16 @@
         </if>
         ;
     </select>
+    <select id="findByBlogIdAndCategoryId"
+            parameterType="map"
+            resultType="jblog.dto.PostListElementDto">
+        SELECT post.id                           AS "id",
+               title,
+               DATE_FORMAT(reg_date, '%Y/%m/%d') AS "regDate"
+        FROM post
+                 LEFT JOIN jblog.category c ON post.category_id = c.id
+        WHERE category_id = #{categoryId}
+          AND blog_id = #{blogId}
+        ORDER BY reg_date DESC, id DESC;
+    </select>
 </mapper>

@@ -42,12 +42,7 @@
                         <p id="post-content">
                         <p>
                     </div>
-                    <ul class="blog-list">
-                        <li><a href="">Spring Camp 2016 참여기</a> <span>2015/05/02</span></li>
-                        <li><a href="">Spring Boot 사용법 정리</a> <span>2015/05/02</span></li>
-                        <li><a href="">Spring Security 설정법</a> <span>2015/05/02</span></li>
-                        <li><a href="">JPA + Hinernate</a> <span>2015/05/02</span></li>
-                        <li><a href="">AOP 활용하기 - DAO 실행시간 측정하기</a> <span>2015/05/02</span></li>
+                    <ul id="blog-list" class="blog-list">
                     </ul>
                 </div>
             </c:otherwise>
@@ -85,10 +80,36 @@
         content: `${fn:replace(POST.content, "`", "\\`")}`
     }
 
-    $(function () {
+    $(() => {
         $('#post-title').text(post.title);
         $('#post-content').text(post.content);
     })
     </c:if>
+
+    $(() => {
+        $.ajax({
+            url: '${contextPath}/api/${BLOG.blogId}/${POST.categoryId}',
+            method: 'GET',
+            dataType: 'json',
+            success: (res) => {
+                console.log(res);
+                res.forEach(elem => {
+                    console.log(elem);
+                    const listElement = document.createElement('li');
+
+                    const link = document.createElement('a');
+                    link.href = '${contextPath}/${BLOG.blogId}/${POST.categoryId}'
+                    link.textContent = elem.title;
+                    listElement.appendChild(link);
+
+                    const regDate = document.createElement('span');
+                    regDate.textContent = elem.regDate;
+                    listElement.appendChild(regDate);
+
+                    $('#blog-list').append(listElement);
+                })
+            }
+        })
+    })
 </script>
 </html>

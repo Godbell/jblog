@@ -1,7 +1,14 @@
 package jblog.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jblog.dto.PostListElementDto;
 import jblog.dto.PostQueryDto;
 import jblog.dto.PostResponseDto;
 import jblog.repository.PostRepository;
@@ -31,5 +38,15 @@ public class PostService {
         queryDto.setCategoryId(categoryId);
 
         return postRepository.findByIdOrDefault(queryDto);
+    }
+
+    public String getPostListJsonString(String blogId, Long categoryId) throws IOException {
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        List<PostListElementDto> list = postRepository.findByBlogIdAndCategoryId(blogId, categoryId);
+        objectMapper.writeValue(byteArrayOutputStream, list);
+        
+        return byteArrayOutputStream.toString();
     }
 }

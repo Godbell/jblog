@@ -1,8 +1,12 @@
 package jblog.repository;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import jblog.dto.PostListElementDto;
 import jblog.dto.PostQueryDto;
 import jblog.dto.PostResponseDto;
 import jblog.vo.PostVo;
@@ -23,6 +27,18 @@ public class PostRepository {
         return this.sqlSession.selectOne(
             "post.findByIdOrDefault",
             dto
+        );
+    }
+
+    public List<PostListElementDto> findByBlogIdAndCategoryId(
+        String blogId, Long categoryId
+    ) {
+        return this.sqlSession.selectList(
+            "post.findByBlogIdAndCategoryId",
+            Map.of(
+                "blogId", blogId,
+                "categoryId", categoryId
+            )
         );
     }
 }
