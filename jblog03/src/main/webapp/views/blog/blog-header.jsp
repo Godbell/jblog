@@ -6,7 +6,7 @@
 <%--@elvariable id="BLOG" type="jblog.vo.BlogVo"--%>
 
 <div id="header">
-    <h1>Spring 이야기</h1>
+    <h1>${BLOG.title}</h1>
     <ul>
         <c:choose>
             <c:when test="${empty sessionScope[userAttributeName]}">
