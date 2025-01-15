@@ -11,4 +11,12 @@
             SELECT LAST_INSERT_ID() as id;
         </selectKey>
     </insert>
+    <select id="findAllByBlogId" parameterType="string" resultType="category">
+        SELECT id,
+               name,
+               description,
+               blog_id AS "blogId"
+        FROM category
+        WHERE blog_id = #{blogId}
+    </select>
 </mapper>

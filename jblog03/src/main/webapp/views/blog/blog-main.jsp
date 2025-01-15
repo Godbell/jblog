@@ -51,17 +51,13 @@
 
     <div id="extra">
         <div class="blog-logo">
-            <img src=${contextPath}/~assets/images/spring-logo.jpg">
+            <img src="${contextPath}/${BLOG.profile}">
         </div>
     </div>
 
     <div id="navigation">
         <h2>카테고리</h2>
-        <ul>
-            <li><a href="">닥치고 스프링</a></li>
-            <li><a href="">스프링 스터디</a></li>
-            <li><a href="">스프링 프로젝트</a></li>
-            <li><a href="">기타</a></li>
+        <ul id="category-list">
         </ul>
     </div>
 
@@ -98,7 +94,7 @@
                     const listElement = document.createElement('li');
 
                     const link = document.createElement('a');
-                    link.href = '${contextPath}/${BLOG.blogId}/${POST.categoryId}'
+                    link.href = '${contextPath}/${BLOG.blogId}/${POST.categoryId}/' + elem.id
                     link.textContent = elem.title;
                     listElement.appendChild(link);
 
@@ -107,6 +103,27 @@
                     listElement.appendChild(regDate);
 
                     $('#blog-list').append(listElement);
+                })
+            }
+        })
+
+        $.ajax({
+            url: '${contextPath}/api/${BLOG.blogId}/category/all',
+            method: 'GET',
+            dataType: 'json',
+            success: (res) => {
+                console.log(res);
+
+                res.forEach(elem => {
+                    console.log(elem);
+                    const listElement = document.createElement('li');
+
+                    const link = document.createElement('a');
+                    link.href = '${contextPath}/${BLOG.blogId}/' + elem.id
+                    link.textContent = elem.name;
+                    listElement.appendChild(link);
+
+                    $('#category-list').append(listElement);
                 })
             }
         })

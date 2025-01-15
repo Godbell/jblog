@@ -26,7 +26,7 @@ public class BlogService {
         BlogVo blogVo = new BlogVo();
         blogVo.setBlogId(blogId);
         blogVo.setTitle(blogId + "의 블로그");
-        blogVo.setProfile("안녕하세요, " + blogId + "의 블로그입니다.");
+        blogVo.setProfile("~assets/images/default_blog_img.jpg");
         blogRepository.save(blogVo);
 
         CategoryVo categoryVo =
