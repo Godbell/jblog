@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="post">
+    <insert id="post.insert" parameterType="post" useGeneratedKeys="true">
+        INSERT INTO post (content, reg_date, category_id, title)
+        VALUES (#{content}, CURRENT_TIMESTAMP(), #{categoryId}, #{title});
+    </insert>
+    <select id="post.findByIdOrDefault"
+            parameterType="jblog.dto.PostQueryDto"
+            resultType="jblog.dto.PostResponseDto">
+        SELECT c.id AS "categoryId",
+        c.name AS "categoryName",
+        p.id AS "id",
+        p.title AS "title",
+        p.reg_date AS "regDate",
+        p.content AS "content"
+        FROM post p
+        LEFT JOIN jblog.category c on p.category_id = c.id
+        <choose>
+            <when test="postId == null">
+                WHERE c.blog_id = #{blogId}
+                ORDER BY reg_date DESC
+                LIMIT 0, 1
+            </when>
+            <otherwise>
+                WHERE p.id = #{postId}
+            </otherwise>
+        </choose>
+        <if test="categoryId != null">
+            AND category_id = #{categoryId}
+        </if>
+        ;
+    </select>
+</mapper>

@@ -5,4 +5,5 @@ public enum JBlogAttribute {
     ERRORS,
     ERROR,
     BLOG,
+    POST,
 }

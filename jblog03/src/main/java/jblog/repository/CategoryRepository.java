@@ -13,7 +13,8 @@ public class CategoryRepository {
         this.sqlSession = sqlSession;
     }
 
-    public void save(CategoryVo vo) {
+    public CategoryVo save(CategoryVo vo) {
         sqlSession.insert("category.insert", vo);
+        return vo;
     }
 }

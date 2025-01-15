@@ -6,11 +6,13 @@
         INSERT INTO blog (title, profile, blog_id)
         VALUES (#{title}, #{profile}, #{blogId})
     </insert>
-    <select id="blog.findById" parameterType="string" resultType="blog">
-        SELECT blog_id,
+    <select id="blog.findById"
+            parameterType="string"
+            resultType="jblog.vo.BlogVo">
+        SELECT blog_id AS "blogId",
                title,
                profile
         FROM blog
-        WHERE blog_id = #{blogId};
+        WHERE blog.blog_id = #{blogId};
     </select>
 </mapper>

@@ -10,17 +10,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jblog.config.constant.HeaderName;
 import jblog.config.constant.JBlogAttribute;
 import jblog.config.constant.JBlogView;
+import jblog.dto.PostResponseDto;
 import jblog.exception.NotFoundException;
 import jblog.service.BlogService;
+import jblog.service.PostService;
 import jblog.vo.BlogVo;
 
 @RequestMapping("/{blogId:^(?!~).*}")
 @Controller
 public class BlogController {
     private final BlogService blogService;
+    private final PostService postService;
 
-    public BlogController(BlogService blogService) {
+    public BlogController(BlogService blogService, PostService postService) {
         this.blogService = blogService;
+        this.postService = postService;
     }
 
     @GetMapping({"", "/", "/{categoryId}", "/{categoryId}/{postId}"})
@@ -39,13 +43,23 @@ public class BlogController {
             }
         }
 
-        BlogVo blogVo = blogService.getBlog(blogId);
+        BlogVo blog = blogService.getBlog(blogId);
 
-        if (blogVo == null) {
+        if (blog == null) {
             throw new NotFoundException();
         }
 
-        model.addAttribute(JBlogAttribute.BLOG.name(), blogVo);
+        PostResponseDto post = postService.getPost(
+            postId, blogId, categoryId
+        );
+
+        if (categoryId != null && post == null) {
+            throw new NotFoundException();
+        }
+
+        model.addAttribute(JBlogAttribute.BLOG.name(), blog);
+        model.addAttribute(JBlogAttribute.POST.name(), post);
+
         return JBlogView.BLOG;
     }
 }

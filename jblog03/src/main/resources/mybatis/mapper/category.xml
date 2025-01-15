@@ -5,7 +5,10 @@
     <insert id="category.insert" parameterType="category">
         INSERT INTO category (name, description, blog_id)
         VALUES (#{name},
-                #{description},
-                #{blogId});
+        #{description},
+        #{blogId});
+        <selectKey resultType="long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() as id;
+        </selectKey>
     </insert>
 </mapper>
