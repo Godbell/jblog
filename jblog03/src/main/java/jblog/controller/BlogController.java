@@ -53,7 +53,7 @@ public class BlogController {
             postId, blogId, categoryId
         );
 
-        if (categoryId != null && post == null) {
+        if (categoryId != null && postId != null && post == null) {
             throw new NotFoundException();
         }
 
