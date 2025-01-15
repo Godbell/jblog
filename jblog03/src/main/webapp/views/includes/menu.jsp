@@ -14,7 +14,11 @@
             <li><a href="${contextPath}/user/join">회원가입</a></li>
         </c:when>
         <c:otherwise>
-            <li><a href="">내블로그</a></li>
+            <li>
+                <a href="${contextPath}/${sessionScope[userAttributeName].id}">
+                    내블로그
+                </a>
+            </li>
             <li><a href="${contextPath}/user/signout">로그아웃</a></li>
         </c:otherwise>
     </c:choose>

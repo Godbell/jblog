@@ -29,7 +29,7 @@
         <form:input path="id" id="blog-id" name="id" type="text"/>
         <input id="btn-checkemail" type="button" value="id 중복체크">
         <img id="img-checkemail" style="display: none;"
-             src="${contextPath}/assets/images/check.png">
+             src="${contextPath}/~assets/images/check.png">
         <br>
         <form:errors path="id"/>
 
@@ -48,7 +48,7 @@
     </form:form>
 </div>
 </body>
-<script src="${contextPath}/assets/js/jquery/jquery-1.9.0.js"></script>
+<script src="${contextPath}/~assets/js/jquery/jquery-1.9.0.js"></script>
 <script>
     const formStatus = {
         isDupChecked: false,

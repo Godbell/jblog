@@ -1,5 +1,7 @@
 package jblog.repository;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +15,12 @@ public class CategoryRepository {
         this.sqlSession = sqlSession;
     }
 
-    public void save(CategoryVo vo) {
+    public CategoryVo save(CategoryVo vo) {
         sqlSession.insert("category.insert", vo);
+        return vo;
+    }
+
+    public List<CategoryVo> findAllByBlogId(String blogId) {
+        return sqlSession.selectList("category.findAllByBlogId", blogId);
     }
 }
