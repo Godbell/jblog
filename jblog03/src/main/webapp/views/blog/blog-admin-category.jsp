@@ -12,7 +12,9 @@
     <c:import url="/views/blog/blog-header.jsp"/>
     <div id="wrapper">
         <div id="content" class="full-screen">
-            <c:import url="/views/blog/blog-admin-menu.jsp"/>
+            <c:import url="/views/blog/blog-admin-menu.jsp">
+                <c:param name="currentPage" value="CATEGORY"/>
+            </c:import>
             <table class="admin-cat">
                 <tr>
                     <th>번호</th>

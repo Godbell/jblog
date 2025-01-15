@@ -13,7 +13,9 @@
     <c:import url="/views/blog/blog-header.jsp"/>
     <div id="wrapper">
         <div id="content" class="full-screen">
-            <c:import url="/views/blog/blog-admin-menu.jsp"/>
+            <c:import url="/views/blog/blog-admin-menu.jsp">
+                <c:param name="currentPage" value="WRITE"/>
+            </c:import>
             <form action="" method="post">
                 <table class="admin-cat-write">
                     <tr>
