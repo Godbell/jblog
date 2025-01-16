@@ -25,8 +25,8 @@
         <br>
         <form:errors path="name"/>
 
-        <label class="block-label" for="blog-id">아이디</label>
-        <form:input path="id" id="blog-id" name="id" type="text"/>
+        <label class="block-label" for="blogInfo-id">아이디</label>
+        <form:input path="id" id="blogInfo-id" name="id" type="text"/>
         <input id="btn-checkemail" type="button" value="id 중복체크">
         <img id="img-checkemail" style="display: none;"
              src="${contextPath}/~assets/images/check.png">
@@ -63,7 +63,7 @@
         const $emailCheckButton = $("#btn-checkemail");
 
         $emailCheckButton.click(function () {
-            const $id = $('#blog-id');
+            const $id = $('#blogInfo-id');
 
             if ($id.val().length === 0) {
                 return;

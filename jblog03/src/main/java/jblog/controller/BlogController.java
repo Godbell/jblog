@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jblog.config.blog.BlogInfo;
 import jblog.config.constant.HeaderName;
 import jblog.config.constant.JBlogAttribute;
 import jblog.config.constant.JBlogView;
@@ -14,8 +15,8 @@ import jblog.dto.PostResponseDto;
 import jblog.exception.NotFoundException;
 import jblog.service.BlogService;
 import jblog.service.PostService;
-import jblog.vo.BlogVo;
 
+@BlogInfo
 @RequestMapping("/{blogId:^(?!~).*}")
 @Controller
 public class BlogController {
@@ -28,50 +29,17 @@ public class BlogController {
     }
 
     @GetMapping({"admin", "admin/", "/admin/basic"})
-    public String viewAdminBasic(
-        @PathVariable("blogId") String blogId,
-        Model model
-    ) {
-        BlogVo blog = blogService.getBlog(blogId);
-
-        if (blog == null) {
-            throw new NotFoundException();
-        }
-
-        model.addAttribute(JBlogAttribute.BLOG.name(), blog);
-
+    public String viewAdminBasic() {
         return JBlogView.BLOG_ADMIN_BASIC;
     }
 
     @GetMapping("/admin/category")
-    public String viewAdminCategory(
-        @PathVariable("blogId") String blogId,
-        Model model
-    ) {
-        BlogVo blog = blogService.getBlog(blogId);
-
-        if (blog == null) {
-            throw new NotFoundException();
-        }
-
-        model.addAttribute(JBlogAttribute.BLOG.name(), blog);
-
+    public String viewAdminCategory() {
         return JBlogView.BLOG_ADMIN_CATEGORY;
     }
 
     @GetMapping("/admin/write")
-    public String viewAdminWrite(
-        @PathVariable("blogId") String blogId,
-        Model model
-    ) {
-        BlogVo blog = blogService.getBlog(blogId);
-
-        if (blog == null) {
-            throw new NotFoundException();
-        }
-
-        model.addAttribute(JBlogAttribute.BLOG.name(), blog);
-
+    public String viewAdminWrite() {
         return JBlogView.BLOG_ADMIN_WRITE;
     }
 
@@ -91,12 +59,6 @@ public class BlogController {
             }
         }
 
-        BlogVo blog = blogService.getBlog(blogId);
-
-        if (blog == null) {
-            throw new NotFoundException();
-        }
-
         PostResponseDto post = postService.getPost(
             postId, blogId, categoryId
         );
@@ -105,7 +67,6 @@ public class BlogController {
             throw new NotFoundException();
         }
 
-        model.addAttribute(JBlogAttribute.BLOG.name(), blog);
         model.addAttribute(JBlogAttribute.POST.name(), post);
 
         return JBlogView.BLOG;
