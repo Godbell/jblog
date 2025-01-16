@@ -42,4 +42,11 @@ public class PostRepository {
             )
         );
     }
+
+    public void unsetCategoryByCategoryId(Long categoryId) {
+        this.sqlSession.update(
+            "post.unsetCategoryByCategoryId",
+            categoryId
+        );
+    }
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jblog.config.blog.Blog;
 import jblog.config.constant.HeaderName;
 import jblog.dto.CategoryCreateDto;
 import jblog.exception.BadRequestException;
@@ -52,6 +53,7 @@ public class BlogRestController {
         return categoryService.getCategoryListJsonString(blogId);
     }
 
+    @Blog(requiresOwnership = true)
     @PostMapping("/category")
     public String createCategory(
         @PathVariable("blogId") String blogId,
@@ -68,6 +70,7 @@ public class BlogRestController {
         return "OK";
     }
 
+    @Blog(requiresOwnership = true)
     @GetMapping("/category/{categoryId}/delete")
     public String deleteCategory(
         @PathVariable("blogId") String blogId,

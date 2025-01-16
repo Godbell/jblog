@@ -47,4 +47,12 @@
           AND blog_id = #{blogId}
         ORDER BY reg_date DESC, id DESC;
     </select>
+    <update id="unsetCategoryByCategoryId" parameterType="long">
+        UPDATE post
+        SET category_id = (SELECT c.id
+                           FROM category c
+                           ORDER BY c.id
+                           LIMIT 0, 1)
+        WHERE category_id = #{id};
+    </update>
 </mapper>

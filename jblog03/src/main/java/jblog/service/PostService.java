@@ -58,4 +58,8 @@ public class PostService {
 
         return byteArrayOutputStream.toString();
     }
+
+    public void unsetCategories(Long categoryId) {
+        postRepository.unsetCategoryByCategoryId(categoryId);
+    }
 }
