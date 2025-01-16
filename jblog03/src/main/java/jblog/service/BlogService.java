@@ -30,7 +30,7 @@ public class BlogService {
         blogRepository.save(blogVo);
 
         CategoryVo categoryVo =
-            categoryService.createCategory("미분류", blogId);
+            categoryService.createCategory("미분류", "", blogId);
 
         postService.createPost(
             "새 포스트를 작성해 보세요!",

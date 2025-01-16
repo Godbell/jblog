@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jblog.dto.CategoryCreateDto;
 import jblog.repository.CategoryRepository;
 import jblog.vo.CategoryVo;
 
@@ -19,9 +20,14 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public CategoryVo createCategory(String categoryName, String blogId) {
+    public CategoryVo createCategory(CategoryCreateDto dto) {
+        return createCategory(dto.getName(), dto.getDescription(), dto.getBlogId());
+    }
+
+    public CategoryVo createCategory(String name, String description, String blogId) {
         CategoryVo vo = new CategoryVo();
-        vo.setName(categoryName);
+        vo.setName(name);
+        vo.setDescription(description);
         vo.setBlogId(blogId);
 
         return categoryRepository.save(vo);

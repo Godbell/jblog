@@ -4,11 +4,15 @@ import java.io.IOException;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jblog.config.constant.HeaderName;
+import jblog.dto.CategoryCreateDto;
+import jblog.exception.BadRequestException;
 import jblog.service.CategoryService;
 import jblog.service.PostService;
 
@@ -46,5 +50,21 @@ public class BlogRestController {
     ) throws IOException {
         res.setHeader(HeaderName.CONTENT_TYPE, "application/json");
         return categoryService.getCategoryListJsonString(blogId);
+    }
+
+    @PostMapping("/category")
+    public String createCategory(
+        @PathVariable("blogId") String blogId,
+        @RequestBody CategoryCreateDto dto
+    ) {
+        if (
+            dto.getName() == null || "".equals(dto.getName())
+        ) {
+            throw new BadRequestException();
+        }
+
+        dto.setBlogId(blogId);
+        categoryService.createCategory(dto);
+        return "OK";
     }
 }
