@@ -21,14 +21,31 @@
         </mvc:argument-resolvers>
     </mvc:annotation-driven>
 
+    <context:component-scan base-package="jblog"/>
+
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <mvc:exclude-mapping path="/user/join"/>
             <mvc:exclude-mapping path="/user/login"/>
+            <mvc:exclude-mapping path="/~assets/**"/>
             <bean class="jblog.config.auth.AuthInterceptor"/>
         </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/"/>
+            <mvc:exclude-mapping path="/user/join"/>
+            <mvc:exclude-mapping path="/user/joinsuccess"/>
+            <mvc:exclude-mapping path="/user/signin"/>
+            <mvc:exclude-mapping path="/user/signout"/>
+            <mvc:exclude-mapping path="/~assets/**"/>
+            <bean class="jblog.config.blog.BlogInterceptor">
+                <constructor-arg index="0" ref="blogService"/>
+            </bean>
+        </mvc:interceptor>
     </mvc:interceptors>
+
+    <mvc:resources mapping="~assets/uploads/**" location="/META-INF/uploads/"/>
 
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
@@ -43,7 +60,6 @@
     </bean>
 
     <context:annotation-config/>
-    <context:component-scan base-package="jblog"/>
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="org.mariadb.jdbc.Driver"/>
@@ -64,4 +80,6 @@
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <constructor-arg index="0" ref="dataSource"/>
     </bean>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
 </beans>

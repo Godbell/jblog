@@ -15,4 +15,10 @@
         FROM blog
         WHERE blog.blog_id = #{blogId};
     </select>
+    <update id="update" parameterType="blog">
+        UPDATE blog
+        SET title   = #{title},
+            profile = IFNULL(#{profile}, profile)
+        WHERE blog_id = #{blogId}
+    </update>
 </mapper>

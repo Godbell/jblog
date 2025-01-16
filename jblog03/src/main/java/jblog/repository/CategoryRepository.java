@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import jblog.dto.CategoryDeleteDto;
 import jblog.vo.CategoryVo;
 
 @Repository
@@ -22,5 +23,9 @@ public class CategoryRepository {
 
     public List<CategoryVo> findAllByBlogId(String blogId) {
         return sqlSession.selectList("category.findAllByBlogId", blogId);
+    }
+
+    public void deleteCategory(CategoryDeleteDto dto) {
+        sqlSession.delete("category.deleteCategory", dto);
     }
 }

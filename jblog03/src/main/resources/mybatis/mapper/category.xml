@@ -15,8 +15,24 @@
         SELECT id,
                name,
                description,
-               blog_id AS "blogId"
+               blog_id AS "blogId",
+               ROW_NUMBER() OVER (ORDER BY id)
+                       AS "index",
+               (SELECT COUNT(*) FROM post WHERE category_id = category.id)
+                       AS "postCount"
         FROM category
         WHERE blog_id = #{blogId}
+        ORDER BY id;
     </select>
+    <delete id="deleteCategory" parameterType="jblog.dto.CategoryDeleteDto">
+        DELETE
+        FROM category
+        WHERE id = #{id}
+          AND blog_id = #{blogId}
+          AND id != (SELECT c2.id
+                     FROM category c2
+                     WHERE c2.blog_id = #{blogId}
+                     ORDER BY c2.id
+                     LIMIT 0, 1);
+    </delete>
 </mapper>

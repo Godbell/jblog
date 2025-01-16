@@ -1,7 +1,12 @@
 package jblog.service;
 
-import org.springframework.stereotype.Service;
+import java.io.IOException;
 
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import jblog.component.FileManager;
+import jblog.exception.BadRequestException;
 import jblog.repository.BlogRepository;
 import jblog.vo.BlogVo;
 import jblog.vo.CategoryVo;
@@ -11,15 +16,17 @@ public class BlogService {
     private final BlogRepository blogRepository;
     private final PostService postService;
     private final CategoryService categoryService;
+    private final FileManager fileManager;
 
     public BlogService(
         BlogRepository blogRepository,
         PostService postService,
-        CategoryService categoryService
-    ) {
+        CategoryService categoryService,
+        FileManager fileManager) {
         this.blogRepository = blogRepository;
         this.postService = postService;
         this.categoryService = categoryService;
+        this.fileManager = fileManager;
     }
 
     public void createBlog(String blogId) {
@@ -30,7 +37,7 @@ public class BlogService {
         blogRepository.save(blogVo);
 
         CategoryVo categoryVo =
-            categoryService.createCategory("미분류", blogId);
+            categoryService.createCategory("미분류", "", blogId);
 
         postService.createPost(
             "새 포스트를 작성해 보세요!",
@@ -45,5 +52,29 @@ public class BlogService {
 
     public BlogVo getBlog(String id) {
         return blogRepository.findById(id);
+    }
+
+    public void updateBlogInfo(
+        String blogId,
+        String title,
+        MultipartFile file,
+        String uploadDir
+    ) throws IOException {
+        BlogVo vo = new BlogVo();
+        vo.setBlogId(blogId);
+        vo.setTitle(title);
+
+        if (file != null && !file.isEmpty()) {
+            String filename = fileManager.saveFile(uploadDir, file, null);
+
+            if (filename == null) {
+                throw new BadRequestException();
+            }
+
+            String filePath = "~assets/uploads/" + filename;
+            vo.setProfile(filePath);
+        }
+
+        blogRepository.update(vo);
     }
 }
