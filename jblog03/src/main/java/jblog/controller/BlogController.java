@@ -1,5 +1,7 @@
 package jblog.controller;
 
+import java.io.IOException;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,7 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jblog.config.auth.Auth;
 import jblog.config.blog.Blog;
@@ -39,6 +44,26 @@ public class BlogController {
     @GetMapping({"admin", "admin/", "/admin/basic"})
     public String viewAdminBasic() {
         return JBlogView.BLOG_ADMIN_BASIC;
+    }
+
+    @Auth
+    @Blog(requiresOwnership = true)
+    @PostMapping("/admin/basic")
+    public String updateBlog(
+        @PathVariable("blogId") String blogId,
+        @RequestParam("title") String title,
+        @RequestParam("logo-file") MultipartFile file,
+        HttpServletRequest request
+    ) throws IOException {
+        if (title == null || title.isEmpty()) {
+            return JBlogView.BLOG_ADMIN_BASIC;
+        }
+
+        blogService.updateBlogInfo(blogId, title, file,
+            request.getServletContext().getRealPath("/META-INF/uploads")
+        );
+
+        return "redirect:/" + blogId + "/admin/basic";
     }
 
     @Auth

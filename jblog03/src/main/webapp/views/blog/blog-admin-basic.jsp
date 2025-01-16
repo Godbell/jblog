@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
@@ -17,13 +18,13 @@
             <c:import url="/views/blog/blog-admin-menu.jsp">
                 <c:param name="currentPage" value="BASIC"/>
             </c:import>
-            <form action="${contextPath}/${BLOG.blogId}/admin/write"
+            <form action="${contextPath}/${BLOG.blogId}/admin/basic"
                   method="post"
                   enctype="multipart/form-data">
                 <table class="admin-config">
                     <tr>
                         <td class="t">블로그 제목</td>
-                        <td><input type="text" size="40" name="title"></td>
+                        <td><input type="text" size="40" name="title" value="${BLOG.title}"></td>
                     </tr>
                     <tr>
                         <td class="t">로고이미지</td>

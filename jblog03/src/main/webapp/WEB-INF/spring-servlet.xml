@@ -45,6 +45,8 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
+    <mvc:resources mapping="~assets/uploads/**" location="/META-INF/uploads/"/>
+
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
         <property name="prefix" value="/views/"/>
@@ -78,4 +80,6 @@
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <constructor-arg index="0" ref="dataSource"/>
     </bean>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
 </beans>
