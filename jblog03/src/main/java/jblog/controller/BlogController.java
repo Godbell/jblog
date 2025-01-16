@@ -2,21 +2,27 @@ package jblog.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import jblog.config.blog.BlogInfo;
+import jakarta.validation.Valid;
+import jblog.config.auth.Auth;
+import jblog.config.blog.Blog;
 import jblog.config.constant.HeaderName;
 import jblog.config.constant.JBlogAttribute;
 import jblog.config.constant.JBlogView;
+import jblog.dto.PostCreateDto;
 import jblog.dto.PostResponseDto;
 import jblog.exception.NotFoundException;
 import jblog.service.BlogService;
 import jblog.service.PostService;
+import jblog.vo.PostVo;
 
-@BlogInfo
 @RequestMapping("/{blogId:^(?!~).*}")
 @Controller
 public class BlogController {
@@ -28,22 +34,48 @@ public class BlogController {
         this.postService = postService;
     }
 
+    @Auth
+    @Blog(requiresOwnership = true)
     @GetMapping({"admin", "admin/", "/admin/basic"})
     public String viewAdminBasic() {
         return JBlogView.BLOG_ADMIN_BASIC;
     }
 
+    @Auth
+    @Blog(requiresOwnership = true)
     @GetMapping("/admin/category")
     public String viewAdminCategory() {
         return JBlogView.BLOG_ADMIN_CATEGORY;
     }
 
+    @Auth
+    @Blog(requiresOwnership = true)
     @GetMapping("/admin/write")
-    public String viewAdminWrite() {
+    public String viewAdminWrite(@ModelAttribute PostCreateDto postCreateDto) {
         return JBlogView.BLOG_ADMIN_WRITE;
     }
 
+    @Auth
+    @Blog(requiresOwnership = true)
+    @PostMapping("/admin/write")
+    public String writePost(
+        @PathVariable("blogId") String blogId,
+        @ModelAttribute @Valid PostCreateDto postCreateDto,
+        BindingResult result,
+        Model model
+    ) {
+        if (result.hasErrors()) {
+            model.addAllAttributes(result.getModel());
+            return JBlogView.BLOG_ADMIN_WRITE;
+        }
+
+        PostVo postVo = postService.createPost(postCreateDto);
+
+        return "redirect:/" + blogId + "/" + postVo.getCategoryId() + "/" + postVo.getId();
+    }
+
     @GetMapping({"", "/", "/{categoryId:^[0-9]*$}", "/{categoryId:^[0-9]*$}/{postId:^[0-9]*$}"})
+    @Blog
     public String viewBlog(
         @PathVariable("blogId") String blogId,
         @PathVariable(value = "categoryId", required = false) Long categoryId,

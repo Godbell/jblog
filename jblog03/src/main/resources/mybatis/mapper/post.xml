@@ -5,6 +5,9 @@
     <insert id="post.insert" parameterType="post" useGeneratedKeys="true">
         INSERT INTO post (content, reg_date, category_id, title)
         VALUES (#{content}, CURRENT_TIMESTAMP(), #{categoryId}, #{title});
+        <selectKey resultType="long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() as id;
+        </selectKey>
     </insert>
     <select id="post.findByIdOrDefault"
             parameterType="jblog.dto.PostQueryDto"

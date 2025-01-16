@@ -9,9 +9,11 @@ import org.springframework.web.servlet.HandlerMapping;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jblog.config.constant.JBlogAttribute;
+import jblog.config.constant.JBlogRequestMapping;
 import jblog.exception.NotFoundException;
 import jblog.service.BlogService;
 import jblog.vo.BlogVo;
+import jblog.vo.UserVo;
 
 public class BlogInterceptor implements HandlerInterceptor {
     private final BlogService blogService;
@@ -31,17 +33,17 @@ public class BlogInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        BlogInfo blogInfo = null;
+        Blog blog = null;
 
         HandlerMethod handlerMethod = (HandlerMethod)handler;
-        if (handlerMethod.getMethodAnnotation(BlogInfo.class) != null) {
-            blogInfo = handlerMethod.getMethodAnnotation(BlogInfo.class);
+        if (handlerMethod.getMethodAnnotation(Blog.class) != null) {
+            blog = handlerMethod.getMethodAnnotation(Blog.class);
         }
-        if (handlerMethod.getBeanType().getAnnotation(BlogInfo.class) != null) {
-            blogInfo = handlerMethod.getBeanType().getAnnotation(BlogInfo.class);
+        if (handlerMethod.getBeanType().getAnnotation(Blog.class) != null) {
+            blog = handlerMethod.getBeanType().getAnnotation(Blog.class);
         }
 
-        if (blogInfo == null) {
+        if (blog == null) {
             return true;
         }
 
@@ -50,9 +52,22 @@ public class BlogInterceptor implements HandlerInterceptor {
         );
 
         String blogId = pathVariables.get("blogId");
+        System.out.println("blogId " + blogId);
 
-        if (blogId == null) {
-            throw new NotFoundException();
+        System.out.println("ownership requirement: " + blog.requiresOwnership());
+
+        if (blog.requiresOwnership() == true) {
+            UserVo userVo = (UserVo)request.getSession().getAttribute(JBlogAttribute.SIGNED_USER.name());
+            System.out.println("userId " + userVo.getId());
+
+            if (userVo == null) {
+                response.sendRedirect(JBlogRequestMapping.USER + JBlogRequestMapping.USER_SIGNIN);
+                return false;
+            }
+
+            if (!blogId.equals(userVo.getId())) {
+                throw new NotFoundException();
+            }
         }
 
         BlogVo blogVo = blogService.getBlog(blogId);

@@ -19,8 +19,9 @@ public class PostRepository {
         this.sqlSession = sqlSession;
     }
 
-    public void save(PostVo vo) {
+    public PostVo save(PostVo vo) {
         this.sqlSession.insert("post.insert", vo);
+        return vo;
     }
 
     public PostResponseDto findByIdOrDefault(PostQueryDto dto) {
