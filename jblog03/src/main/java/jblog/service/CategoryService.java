@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jblog.dto.CategoryCreateDto;
+import jblog.dto.CategoryDeleteDto;
 import jblog.repository.CategoryRepository;
 import jblog.vo.CategoryVo;
 
@@ -41,5 +42,13 @@ public class CategoryService {
         objectMapper.writeValue(byteArrayOutputStream, list);
 
         return byteArrayOutputStream.toString();
+    }
+
+    public void deleteCategory(Long categoryId, String blogId) {
+        CategoryDeleteDto dto = new CategoryDeleteDto();
+        dto.setId(categoryId);
+        dto.setBlogId(blogId);
+
+        categoryRepository.deleteCategory(dto);
     }
 }

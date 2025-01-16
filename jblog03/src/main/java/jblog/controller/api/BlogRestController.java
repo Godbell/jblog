@@ -67,4 +67,13 @@ public class BlogRestController {
         categoryService.createCategory(dto);
         return "OK";
     }
+
+    @GetMapping("/category/{categoryId}/delete")
+    public String deleteCategory(
+        @PathVariable("blogId") String blogId,
+        @PathVariable("categoryId") Long categoryId
+    ) {
+        categoryService.deleteCategory(categoryId, blogId);
+        return "OK";
+    }
 }

@@ -63,13 +63,22 @@
                 description: categoryDescription,
             }),
             success: (res) => {
-                console.log('success triggered')
                 window.location.replace(window.location.href);
             }
         })
     }
 
-    function onDelete() {
+    function onDelete(event) {
+        const target = event.target
+        const categoryId = target.getAttribute('data-id');
+
+        $.ajax({
+            url: '${contextPath}/api/${BLOG.blogId}/category/' + categoryId + '/delete',
+            method: 'GET',
+            success: (res) => {
+                window.location.replace(window.location.href);
+            }
+        })
     }
 
     $.ajax({
@@ -106,6 +115,8 @@
                 if (elem.index !== 1) {
                     const deleteImage = document.createElement('img');
                     deleteImage.src = '${contextPath}/~assets/images/delete.jpg';
+                    deleteImage.onclick = onDelete;
+                    deleteImage.setAttribute('data-id', elem.id);
                     deleteImageColumn.appendChild(deleteImage);
                 }
 
