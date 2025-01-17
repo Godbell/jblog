@@ -1,26 +1,28 @@
 package jblog.dto;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public class UserJoinRequestDto {
-    @NotNull
     @NotEmpty
     @Pattern(regexp = "^[a-zA-Z가-힣 ]{1,45}$", message = "알파벳 대소문자와 한글, 공백만 사용할 수 있습니다.")
     private String name;
     /***
      User ID & Blog ID
      */
-    @NotNull
     @NotEmpty
     @Pattern(regexp = "^[a-zA-Z0-9]{1,50}$", message = "알파벳 대소문자와 숫자만 사용할 수 있습니다.")
     private String id;
 
-    @NotNull
     @NotEmpty
     @Pattern(regexp = "^[ -~]{1,16}$", message = "알파벳 대소문자와 숫자, 특수문자만 사용할 수 있습니다.")
     private String password;
+
+    @NotNull
+    @AssertTrue(message = "약관 동의가 필요합니다.")
+    private boolean agreedToTerm;
 
     public String getName() {
         return name;
@@ -44,5 +46,13 @@ public class UserJoinRequestDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isAgreedToTerm() {
+        return agreedToTerm;
+    }
+
+    public void setAgreedToTerm(boolean agreedToTerm) {
+        this.agreedToTerm = agreedToTerm;
     }
 }
