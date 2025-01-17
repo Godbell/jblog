@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jblog.dto.UserJoinRequestDto;
+import jblog.exception.BadRequestException;
 import jblog.repository.UserRepository;
 import jblog.vo.UserVo;
 
@@ -27,6 +28,10 @@ public class UserService {
         userVo.setId(dto.getId());
         userVo.setName(dto.getName());
         userVo.setPassword(dto.getPassword());
+
+        if (!userRepository.isIdAvailable(dto.getId())) {
+            throw new BadRequestException();
+        }
 
         userRepository.save(userVo);
 
